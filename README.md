@@ -42,5 +42,5 @@ query('#id .classname');
 
 # json to table
 ```
-Table.insertJson(source);
+Element.insertTable(JsonString);
 ```
