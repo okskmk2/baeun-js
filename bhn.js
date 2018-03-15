@@ -83,3 +83,5 @@ Window.prototype.query = function (selector) {
     let el = document.querySelectorAll(selector);
     return el.length < 2 ? el[0] : el;
 }
+
+//

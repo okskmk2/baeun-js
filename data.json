@@ -1,0 +1,16 @@
+{
+    "data": [
+        {
+            "title": "JavaEE",
+            "price": "200"
+        },
+        {
+            "title": "Flask",
+            "price": "140"
+        },
+        {
+            "title": "ExpressJS",
+            "price": "110"
+        }
+    ]
+}

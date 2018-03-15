@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <script src="jquery-3.3.1.js"></script> -->
+    <script src='bhn.js'></script>
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 1px solid #888;
+        }
+
+        th,
+        td {
+            border: 1px solid;
+            padding: 0.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/sdf/s" id="de" onsubmit="return false">
+        <input type="text" name="username">
+        <input type="text" name="password">
+        <input type="radio" name="sex" value="true">
+        <input type="radio" name="sex" value="false">
+        <input type="checkbox" name='fav' value="apple">
+        <input type="checkbox" name='fav' value="banana">
+        <select name="addr" multiple>
+            <option>서울</option>
+            <option>도쿄</option>
+            <option>뉴욕</option>
+        </select>
+        <input type='submit'>
+    </form>
+    <script>
+        query('#de').addEventListener('submit', function (ev) {
+            let data = this.toJson();
+            console.log(data);
+            ev.preventDefault();
+        });
+    </script>
+</body>
+
+</html>
