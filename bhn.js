@@ -24,6 +24,21 @@ HTMLElement.prototype.insertTable = function (array) {
     }
 }
 
+//20180319
+HTMLElement.prototype.getAttributeAll = function () {
+    let attrs = Array.from(this.attributes).map((a)=>{
+        o = {};
+        o.name = a.name;
+        o.value = a.value;
+        return o2});
+    return attrs;
+}
+
+//20180319
+NodeList.prototype.getAttributeAll = function() {
+    return list.map((e)=> {e.getAttributeAll()});
+}
+
 HTMLFormElement.prototype.toJson = function () {
     let o = {}
     let els = Array.from(this.elements).filter((e) => { return e.name && e.type != 'file' });
@@ -84,4 +99,4 @@ Window.prototype.query = function (selector) {
     return el.length < 2 ? el[0] : el;
 }
 
-//
+//sdfssd
