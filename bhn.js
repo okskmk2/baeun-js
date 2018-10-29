@@ -1,3 +1,28 @@
+//faster
+function insertTable(el, sourceList){
+    let html = "<table>";
+
+    // making header...
+    let obj = sourceList[0];    
+    html += '<thead><tr>';
+    for (const key of Object.keys(obj)) {
+        html += `<th>${key}</th>`;
+    }
+    html += '</tr></thead>';
+    // making body
+    html += '<tbody>';
+    for (const tr of sourceList) {
+        html += '<tr>';
+        for (const td in tr) {
+            html += `<td>${tr[td]}</td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</tbody>';
+    html += '</table>';
+    el.innerHTML = html;
+}
+
 HTMLElement.prototype.insertElement = function (elementName) {
     let element = document.createElement(elementName);
     this.appendChild(element);
