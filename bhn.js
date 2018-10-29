@@ -1,4 +1,126 @@
-//faster
+function makeTable(target_el, config) {
+    let el_table = document.createElement('table');
+    let data_list = config.data;
+    // make thead
+    let config_ths = config.thead.ths;
+    makeThead(el_table, config_ths);
+    // make tbody
+    let config_tds = config.tbody.tds;
+    makeTbody(el_table, data_list, config_tds);
+
+    target_el.appendChild(el_table);
+    return el_table;
+}
+
+function makeThead(el_table, ths) {
+    let el_thead = document.createElement('thead');
+    let el_tr = document.createElement('tr');
+    let i = 0;
+    let ths_length = ths.length;
+    for (; i < ths_length; i++) {
+        let th = ths[i];
+        let el_th = document.createElement('th');
+        el_th.appendChild(document.createTextNode(th.title));
+        if (th.className) {
+            el_th.classList.add(th.className);
+        }
+        el_th.addEventListener('click', function () {
+            let sortType;
+            if (th.sortType === undefined) {
+                sortType = 'string';
+            } else {
+                sortType = th.sortType;
+            }
+            sorting(el_table, el_th, sortType);
+        })
+        el_tr.appendChild(el_th);
+    }
+    el_thead.appendChild(el_tr);
+    el_table.appendChild(el_thead);
+}
+
+function makeTbody(el_table, data_list, config_tds) {
+    let el_tbody = document.createElement('tbody');
+    let i = 0;
+    let data_list_length = data_list.length;
+    for (; i < data_list_length; i++) {
+        let el_tr = document.createElement('tr');
+        let data_tr = data_list[i];
+        let j = 0;
+        let config_tds_length = config_tds.length;
+        for (; j < config_tds_length; j++) {
+            let data_td = data_tr[config_tds[j].data];
+            let el_td = document.createElement('td');
+            el_td.appendChild(document.createTextNode(data_td));
+            if (typeof config_tds[j].callback === 'function') {
+                el_td.addEventListener('click', function () {
+                    config_tds[j].callback(el_td);
+                })
+            }
+            el_tr.appendChild(el_td);
+        }
+        el_tbody.appendChild(el_tr);
+    }
+    el_table.appendChild(el_tbody);
+}
+
+function sorting(el_table, target_th, sortType) {
+
+    let orderBy;
+    if (target_th.dataset.orderBy === undefined) {
+        orderBy = 'asc';
+    } else {
+        orderBy = target_th.dataset.orderBy;
+    }
+    let tbody = el_table.children[1];
+    let position = Array.from(target_th.parentNode.children).indexOf(target_th);
+    let trs = Array.from(tbody.children).sort(function (a, b) {
+        let a1, b1;
+        if (sortType === 'number') {
+            a1 = +a.children[position].innerHTML;
+            b1 = +b.children[position].innerHTML;
+        } else {
+            a1 = a.children[position].innerHTML;
+            b1 = b.children[position].innerHTML;
+        }
+        return ordering(orderBy, a1, b1);
+    });
+    tbody.children = null;
+    for (let i = 0; i < trs.length; i++) {
+        tbody.appendChild(trs[i]);
+    }
+
+    if (orderBy === 'desc') {
+        target_th.dataset.orderBy = 'asc';
+    } else {
+        target_th.dataset.orderBy = 'desc';
+    }
+
+}
+
+function ordering(orderBy, a1, b1) {
+    if (orderBy !== 'desc') {
+        if (a1 > b1) {
+            return -1;
+        } else if (a1 < b1) {
+            return 1;
+        } else {
+            return 0;
+        }
+    } else {
+        if (a1 > b1) {
+            return 1;
+        } else if (a1 < b1) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+
+
+//easy to read
 function insertTable(el, sourceList){
     let html = "<table>";
 
