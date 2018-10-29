@@ -1,49 +1,116 @@
-<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <script src="jquery-3.3.1.js"></script> -->
-    <script src='bhn.js'></script>
     <title>Document</title>
+    <script src="./table.js"></script>
     <style>
-        table {
-            border-collapse: collapse;
-            border: 1px solid #888;
-        }
-
         th,
         td {
-            border: 1px solid;
-            padding: 0.2rem;
+            border: 1px solid dimgray;
         }
     </style>
 </head>
-
 <body>
-    <form action="/sdf/s" id="de" onsubmit="return false">
-        <input type="text" name="username">
-        <input type="text" name="password">
-        <input type="radio" name="sex" value="true">
-        <input type="radio" name="sex" value="false">
-        <input type="checkbox" name='fav' value="apple">
-        <input type="checkbox" name='fav' value="banana">
-        <select name="addr" multiple>
-            <option>서울</option>
-            <option>도쿄</option>
-            <option>뉴욕</option>
-        </select>
-        <input type='submit'>
-    </form>
+    <div id='grid'></div>
     <script>
-        query('#de').addEventListener('submit', function (ev) {
-            let data = this.toJson();
-            console.log(data);
-            ev.preventDefault();
-        });
+        (function () {
+            const config = {
+                thead: {
+                    ths: [
+                        {
+                            title: 'postId',
+                            className: "a",
+                            sortType: 'number'
+                        },
+                        { title: 'id', sortType: 'number' },
+                        { title: 'name' },
+                        { title: 'email' },
+                        { title: 'body' },
+                    ]
+                },
+                tbody: {
+                    tds: [
+                        { data: 'postId', callback: test },
+                        { data: 'id', callback: {} },
+                        { data: 'name', callback: {} },
+                        { data: 'email', callback: {} },
+                        { data: 'body', callback: {} },
+                    ]
+                }
+            }
+
+            function test(el) {
+                console.log(el);
+            }
+            let grid;
+            fetch('data.json').then(res => res.json()).then(json => {
+                config.data = json;
+                grid = makeTable(document.getElementById('grid'), config);
+                grid.querySelectorAll('th').forEach(el => {
+                    el.style.color = 'red';
+                });
+            })
+
+            function sorting(el) {
+                let tbody = grid.children[1];
+                let position = Array.from(el.parentNode.children).indexOf(el);
+                let c = tbody.children;
+                let trs = Array.from(tbody.children).sort(function (a, b) {
+                    let a1 = a.children[position].innerHTML;
+                    let b1 = b.children[position].innerHTML;
+                    if (a1 > b1) {
+                        return -1;
+                    } else if (a1 < b1) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                });
+                for (let i = 0; i < trs.length; i++) {
+                    tbody.appendChild(trs[i]);
+                }
+            }
+
+            function quickSort(arr, left, right) {
+                var len = arr.length,
+                    pivot,
+                    partitionIndex;
+
+
+                if (left < right) {
+                    pivot = right;
+                    partitionIndex = partition(arr, pivot, left, right);
+
+                    //sort left and right
+                    quickSort(arr, left, partitionIndex - 1);
+                    quickSort(arr, partitionIndex + 1, right);
+                }
+                return arr;
+            }
+
+            function partition(arr, pivot, left, right) {
+                var pivotValue = arr[pivot],
+                    partitionIndex = left;
+
+                for (var i = left; i < right; i++) {
+                    if (arr[i] < pivotValue) {
+                        swap(arr, i, partitionIndex);
+                        partitionIndex++;
+                    }
+                }
+                swap(arr, right, partitionIndex);
+                return partitionIndex;
+            }
+
+            function swap(arr, i, j) {
+                var temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+
+        })();
     </script>
 </body>
-
 </html>
