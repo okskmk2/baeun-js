@@ -1,0 +1,59 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            color: #333;
+        }
+
+        select::-ms-expand {
+            display: none;
+        }
+
+        input::-ms-clear {
+            display: none;
+        }
+
+        input::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        select,
+        input[list] {
+            background-position: right 5px center;
+            background-repeat: no-repeat;
+            background-image: url(./arrow3.png);
+            border: 1px solid #ddd;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding: 3px 24px 3px 6px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select and Datalist CSS style lab</h1>
+    <div>
+        <h2>select</h2>
+        <select>
+            <option>confidence</option>
+            <option>wealth</option>
+            <option>happy</option>
+            <option>fun</option>
+        </select>
+    </div>
+    <div>
+        <h2>datalist</h2>
+        <input list="da">
+        <datalist id="da">
+            <option>confidence</option>
+            <option>wealth</option>
+            <option>happy</option>
+            <option>fun</option>
+        </datalist>
+    </div>
+</body>
+</html>
