@@ -44,3 +44,20 @@ query('#id .classname');
 ```
 Element.insertTable(JsonString);
 ```
+
+# makeTable
+```
+            makeTable(query('#diary_list'), {
+                thead:{
+                  ths:[
+                      {title:'id'},{title:'content'},{title:'event_dt'}
+                  ]
+                },
+                tbody:{
+                  tds:[
+                      {data:'id'},{data:'content'},{data:'event_dt'}
+                  ]
+                },
+                data:res.data
+            })
+```
