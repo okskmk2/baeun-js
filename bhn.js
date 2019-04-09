@@ -219,6 +219,37 @@ HTMLFormElement.prototype.toJson = function () {
     return JSON.stringify(o);
 }
 
+HTMLTableElement.prototype.getData = function () {
+    let start_index = (this.querySelector('tr th:nth-child(2)') === null) ? 0 : 1;                     
+    if (start_index === 1) {
+        let header = [];
+        let data_list = [];
+        const tr = this.rows[0];
+        for (let i = 0; i < tr.cells.length; i++) {
+            const th = tr.cells[i];
+            header.push(th.innerHTML);
+        }
+        for (let index = start_index; index < this.rows.length; index++) {
+            const tr = this.rows[index];
+            let data = {};
+            for (let j = 0; j < tr.cells.length; j++) {
+                const td = tr.cells[j];
+                data[header[j]] = td.innerHTML;
+            }
+            data_list.push(data);
+        }
+        return data_list;
+    }
+    else {
+        let data = {};
+        for (let index = start_index; index < this.rows.length; index++) {
+            const tr = this.rows[index];
+            data[tr.cells[0].innerHTML] = tr.cells[1].innerHTML;
+        }
+        return data;
+    }
+}
+
 Window.prototype.httpGet = function (url, fn) {
     let ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function () {
@@ -246,4 +277,3 @@ Window.prototype.query = function (selector) {
     return el.length < 2 ? el[0] : el;
 }
 
-//sdfssd
