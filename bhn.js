@@ -271,7 +271,7 @@ Window.prototype.httpPost = function (url, data, fn) {
         }
     }
     ajax.open('post', url, true);
-    ajax.send(data);
+    ajax.send(JSON.stringify(data));
 }
 
 Window.prototype.query = function (selector) {
