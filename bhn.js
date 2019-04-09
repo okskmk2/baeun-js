@@ -73,8 +73,8 @@ function sorting(el_table, target_th, sortType) {
         orderBy = target_th.dataset.orderBy;
     }
     let tbody = el_table.children[1];
-    let position = Array.from(target_th.parentNode.children).indexOf(target_th);
-    let trs = Array.from(tbody.children).sort(function (a, b) {
+    let position = Array.prototype.slice.call(target_th.parentNode.children).indexOf(target_th);
+    let trs = Array.prototype.slice.call(tbody.children).sort(function (a, b) {
         let a1, b1;
         if (sortType === 'number') {
             a1 = +a.children[position].innerHTML;
@@ -121,11 +121,11 @@ function ordering(orderBy, a1, b1) {
 
 
 //easy to read
-function insertTable(el, sourceList){
+function insertTable(el, sourceList) {
     let html = "<table>";
 
     // making header...
-    let obj = sourceList[0];    
+    let obj = sourceList[0];
     html += '<thead><tr>';
     for (const key of Object.keys(obj)) {
         html += `<th>${key}</th>`;
@@ -173,22 +173,23 @@ HTMLElement.prototype.insertTable = function (array) {
 
 //20180319
 HTMLElement.prototype.getAttributeAll = function () {
-    let attrs = Array.from(this.attributes).map((a)=>{
+    let attrs = Array.prototype.slice.call(this.attributes).map((a) => {
         o = {};
         o.name = a.name;
         o.value = a.value;
-        return o2});
-    return attrs;
+        return o;
+    });
+    return attrs.length === 0 ? undefined : attrs;
 }
 
 //20180319
-NodeList.prototype.getAttributeAll = function() {
-    return list.map((e)=> {e.getAttributeAll()});
+NodeList.prototype.getAttributeAll = function () {
+    return Array.prototype.slice.call(this).map(e => e.getAttributeAll());
 }
 
 HTMLFormElement.prototype.toJson = function () {
     let o = {}
-    let els = Array.from(this.elements).filter((e) => { return e.name && e.type != 'file' });
+    let els = Array.prototype.slice.call(this.elements).filter((e) => { return e.name && e.type != 'file' });
     for (const el of els) {
         if (o.hasOwnProperty(el.name)) {
             if (!el.checked) continue;
@@ -196,19 +197,19 @@ HTMLFormElement.prototype.toJson = function () {
             l.push(o[el.name]);
             l.push(el.value);
             o[el.name] = l;
-        } 
-        else if(el.nodeName == 'SELECT'){
+        }
+        else if (el.nodeName == 'SELECT') {
             let key = el.name;
-            let ops = Array.from(el.options);
+            let ops = Array.prototype.slice.call(el.options);
             let l2 = [];
             for (const op of ops) {
                 if (op.selected) {
                     l2.push(op.value);
                 }
             }
-            if(l2.length > 0) o[key] = l2;
+            if (l2.length > 0) o[key] = l2;
         }
-        
+
         else {
             if (el.type == 'radio' || el.type == 'checkbox') {
                 if (!el.checked) continue;
@@ -219,8 +220,9 @@ HTMLFormElement.prototype.toJson = function () {
     return JSON.stringify(o);
 }
 
+//20190410
 HTMLTableElement.prototype.getData = function () {
-    let start_index = (this.querySelector('tr th:nth-child(2)') === null) ? 0 : 1;                     
+    let start_index = (this.querySelector('tr th:nth-child(2)') === null) ? 0 : 1;
     if (start_index === 1) {
         let header = [];
         let data_list = [];
@@ -276,4 +278,3 @@ Window.prototype.query = function (selector) {
     let el = document.querySelectorAll(selector);
     return el.length < 2 ? el[0] : el;
 }
-
