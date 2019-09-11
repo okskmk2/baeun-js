@@ -6,29 +6,48 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
+        .multi-select{
+            vertical-align: top;
+            display: inline-block;
+            position: relative;
+        }
         .multi-select-showBox {
+            box-sizing: border-box;
             display: inline-block;
             min-width: 10rem;
-            min-height: 1rem;
+            min-height: 30px;
             border: 1px solid #ddd;
-            padding: 1px;
+            padding: 3px;
             position: relative;
         }
 
         .multi-select-showItem {
-            border-radius: 4px;
+            border-radius: 5px;
             padding: 1px 4px;
             margin: 1px;
-            background-color: #aaa;
-            color: white;
+            background-color: #ddd;
+            color: black;
+            cursor: pointer;
+            border: 1px solid #bbb;
         }
 
         .multi-select-arrowIcon {
             z-index: 5;
-            right: 0;
+            right: 4px;
+            top: 5px;
             position: absolute;
-            line-height: 1;
+            line-height: 1.2;
+            font-size: 11px;
+            color: #555;
             cursor: pointer;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+        }
+
+        .multi-select-arrowIcon:hover{
+            background-color: #f1f1f1;
         }
 
         .multi-select-selBox {
@@ -36,6 +55,14 @@
             border-top-width: 0;
             display: none;
             cursor: pointer;
+            box-sizing: border-box;
+            background-color: white;   
+            z-index: 10;
+            position: absolute;  
+            width: 100%;       
+        }
+        .multi-select-selBox>div{
+            padding:1px 4px;
         }
 
         .multi-select-selBox>div:hover{
@@ -43,10 +70,7 @@
         }
 
         .multi-select-selBox.multi-select-block {
-            z-index: 5;
-            position: absolute;
             display: block;
-            width: 100%;
         }
 
         .multi-select-hide {
@@ -118,13 +142,20 @@
 
         function multiSelect(mulEl) {
 
-            function cancelItem(e) {
-                e.target.remove();
-                updateSelEl();
-            }
-
             // style
             mulEl.style.display = 'none';
+
+            // if none main area is clicked, init element style.
+            document.querySelector('body').addEventListener('click', function (e) {                
+                let el = e.target.querySelector('.multi-select');
+                if (!el) {
+                    return;
+                }
+                let selBoxs = document.querySelectorAll('.multi-select-selBox');
+                for (let i = 0; i < selBoxs.length; i++) {
+                    selBoxs[i].classList.remove('multi-select-block');                    
+                }
+            })
 
             // main logic
             let pseudoSel = document.createElement('div');
@@ -168,6 +199,7 @@
                     showItem.innerHTML = op.text;
                     showItem.dataset.value = op.value;
                     showItem.classList.add('multi-select-showItem');
+                    // showarea item delete
                     showItem.addEventListener('click', cancelItem);
                     showBoxCore.appendChild(showItem);
                     updateSelEl();
@@ -178,14 +210,28 @@
             showBox.appendChild(showBoxCore);
             showBox.appendChild(arrowIcon);
 
+            function cancelItem(e) {
+                let showItemValue = e.target.dataset.value;
+                e.target.remove();
+                let divs = selBoxEl.querySelectorAll('div');
+                for (let i = 0; i < divs.length; i++) {
+                    const div = divs[i];
+                    if (showItemValue === div.dataset.value) {
+                        div.style.display = 'block';
+                        break;
+                    }
+                }
+                updateSelEl();
+            }
 
             // finally
             pseudoSel.appendChild(showBox);
             pseudoSel.appendChild(selBoxEl);
-            pseudoSel.style.display = 'inline-block';
-            pseudoSel.style.position = 'relative';
+            pseudoSel.className = 'multi-select';
 
             mulEl.insertAdjacentElement('afterend', pseudoSel);
+
+
         }
 
     </script>
