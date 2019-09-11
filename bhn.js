@@ -268,6 +268,13 @@ HTMLSelectElement.prototype.getSelectValues = function(){
     return result;
 }
 
+//20190911
+HTMLSelectElement.prototype.setValues = function (values) {
+    for (var i = 0; i < this.options.length; i++) {
+        this.options[i].selected = values.indexOf(element.options[i].value) >= 0;
+    }
+}
+
 Window.prototype.httpGet = function (url, fn) {
     let ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function () {
