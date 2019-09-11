@@ -1,0 +1,194 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .multi-select-showBox {
+            display: inline-block;
+            min-width: 10rem;
+            min-height: 1rem;
+            border: 1px solid #ddd;
+            padding: 1px;
+            position: relative;
+        }
+
+        .multi-select-showItem {
+            border-radius: 4px;
+            padding: 1px 4px;
+            margin: 1px;
+            background-color: #aaa;
+            color: white;
+        }
+
+        .multi-select-arrowIcon {
+            z-index: 5;
+            right: 0;
+            position: absolute;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .multi-select-selBox {
+            border: 1px solid #ddd;
+            border-top-width: 0;
+            display: none;
+            cursor: pointer;
+        }
+
+        .multi-select-selBox>div:hover{
+            background-color: #f1f1f1;
+        }
+
+        .multi-select-selBox.multi-select-block {
+            z-index: 5;
+            position: absolute;
+            display: block;
+            width: 100%;
+        }
+
+        .multi-select-hide {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <select multiple id='multi-select'>
+        <option value='1'>하나</option>
+        <option value='2'>둘</option>
+        <option value='3'>셋</option>
+        <option value='4'>넷</option>
+    </select>
+
+    <select multiple id='multi-select2'>
+            <option value='1'>하나</option>
+            <option value='2'>둘</option>
+            <option value='3'>셋</option>
+            <option value='4'>넷</option>
+    </select>
+
+    <button onclick="me1()">확인</button>
+
+    <!-- <select multiple id='multi-select2'>
+        <option value='1'>하나</option>
+        <option value='2'>둘</option>
+        <option value='3'>셋</option>
+        <option value='4'>넷</option>
+    </select> -->
+
+    <script>
+
+        HTMLSelectElement.prototype.setValues = function (values) {
+            for (var i = 0; i < this.options.length; i++) {
+                this.options[i].selected = values.indexOf(this.options[i].value) >= 0;
+            }
+        }
+
+
+
+        function getSelectValues(select) {
+            var result = [];
+            var options = select && select.options;
+            var opt;
+
+            for (var i = 0, iLen = options.length; i < iLen; i++) {
+                opt = options[i];
+
+                if (opt.selected) {
+                    result.push(opt.value || opt.text);
+                }
+            }
+            return result;
+        }
+
+        let mulEl = document.getElementById('multi-select');
+
+        let mulEl2 = document.getElementById('multi-select2');
+
+        multiSelect(mulEl2);
+
+        function me1() {
+            console.log(getSelectValues(mulEl));
+        }
+
+        multiSelect(mulEl);
+
+        function multiSelect(mulEl) {
+
+            function cancelItem(e) {
+                e.target.remove();
+                updateSelEl();
+            }
+
+            // style
+            mulEl.style.display = 'none';
+
+            // main logic
+            let pseudoSel = document.createElement('div');
+            let showBox = document.createElement('span');
+
+            function updateSelEl() {
+                let items = showBox.querySelectorAll('.multi-select-showItem');
+                let values = [];
+                for (let i = 0; i < items.length; i++) {
+                    const item = items[i];
+                    values.push(item.dataset.value);
+                }
+                mulEl.setValues(values);
+            }
+
+
+            let showBoxCore = document.createElement('span');
+            let arrowIcon = document.createElement('span');
+
+            arrowIcon.innerHTML = "&#9660;";
+            arrowIcon.classList.add('multi-select-arrowIcon');
+
+            showBox.classList.add('multi-select-showBox');
+
+
+            let selBoxEl = document.createElement('div');
+            selBoxEl.classList.add('multi-select-selBox');
+
+            arrowIcon.addEventListener('click', function () {
+                selBoxEl.classList.toggle('multi-select-block');
+            });
+
+            let ops = mulEl.options;
+            for (let i = 0; i < ops.length; i++) {
+                let item = document.createElement('div');
+                let op = ops[i];
+                item.innerHTML = op.text;
+                item.dataset.value = op.value;
+                item.addEventListener('click', function () {
+                    let showItem = document.createElement('span');
+                    showItem.innerHTML = op.text;
+                    showItem.dataset.value = op.value;
+                    showItem.classList.add('multi-select-showItem');
+                    showItem.addEventListener('click', cancelItem);
+                    showBoxCore.appendChild(showItem);
+                    updateSelEl();
+                    item.style.display = 'none';
+                });
+                selBoxEl.appendChild(item);
+            }
+            showBox.appendChild(showBoxCore);
+            showBox.appendChild(arrowIcon);
+
+
+            // finally
+            pseudoSel.appendChild(showBox);
+            pseudoSel.appendChild(selBoxEl);
+            pseudoSel.style.display = 'inline-block';
+            pseudoSel.style.position = 'relative';
+
+            mulEl.insertAdjacentElement('afterend', pseudoSel);
+        }
+
+    </script>
+</body>
+
+</html>
