@@ -252,6 +252,22 @@ HTMLTableElement.prototype.getData = function () {
     }
 }
 
+//20190911
+HTMLSelectElement.prototype.getSelectValues = function(){
+    var result = [];
+    var options = this && this.options;
+    var opt;
+
+    for (var i = 0, iLen = options.length; i < iLen; i++) {
+        opt = options[i];
+
+        if (opt.selected) {
+            result.push(opt.value || opt.text);
+        }
+    }
+    return result;
+}
+
 Window.prototype.httpGet = function (url, fn) {
     let ajax = new XMLHttpRequest();
     ajax.onreadystatechange = function () {
@@ -277,4 +293,16 @@ Window.prototype.httpPost = function (url, data, fn) {
 Window.prototype.query = function (selector) {
     let el = document.querySelectorAll(selector);
     return el.length < 2 ? el[0] : el;
+}
+
+//20190911
+Window.prototype.getCookie = function(name){
+    name += "=";
+    var arr = decodeURIComponent(document.cookie).split(';');
+    for (var i = 0; i < arr.length; i++) {
+      var c = arr[i];
+      while (c.charAt(0) == ' ') c = c.substring(1);
+      if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+    }
+    return "";
 }
