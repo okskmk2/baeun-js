@@ -1,0 +1,121 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th {
+            font-weight: normal;
+            color: #555;
+            font-size: 14px;
+        }
+
+        td {
+            text-align: right;
+            font-size: 15px;
+            padding: 4px 8px;
+            font-family: monospace;
+        }
+
+        th,
+        td {
+            border: 1px solid;
+        }
+
+        .calendar_header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+            align-items: flex-end;
+        }
+    </style>
+    <script src="./calendar.js"></script>
+</head>
+
+<body>
+    <div style="width: 247px;">
+        <div class="calendar_header">
+            <button onclick="preMonth()">이전달</button>
+            <div id="currentMonthDiv"></div>
+            <button onclick="nextMonth()">다음달</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>일</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th>토</th>
+                </tr>
+            </thead>
+            <tbody id="calendar"></tbody>
+        </table>
+    </div>
+    <script>
+        let currentMonth = new Date().getMonth();
+        const currentMonthDiv = document.getElementById('currentMonthDiv');
+        let date = new Date();
+        function renderCaledar() {
+            const calendar_el = document.getElementById('calendar');
+            let weeks = groupingWeek(getMonthDays(date), true);
+            // calendar drawing
+            calendar_el.innerHTML = null;
+            for (let i = 0; i < weeks.length; i++) {
+                let week = weeks[i];
+                let row = document.createElement('tr');
+                for (let index = 0; index < week.length; index++) {
+                    const day = week[index];
+                    let td = document.createElement('td');
+                    if (index === day.day) {
+                        td.innerHTML = day.date;
+                    }
+                    row.appendChild(td);
+                }
+                calendar_el.appendChild(row);
+            }
+            displayDate();
+        }
+
+        function displayDate() {
+            currentMonthDiv.innerHTML = `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
+        }
+
+        function nextMonth() {
+            if (currentMonth >= 11) {
+                currentMonth = 0;
+                date.setFullYear(date.getFullYear() + 1);
+            } else {
+                currentMonth++;
+            }
+            date.setMonth(currentMonth);
+            renderCaledar();
+        }
+
+        function preMonth() {
+            if (currentMonth <= 0) {
+                currentMonth = 11;
+                date.setFullYear(date.getFullYear() - 1);
+            } else {
+                currentMonth--;
+            }
+            date.setMonth(currentMonth);
+            renderCaledar();
+        }
+
+        renderCaledar();
+
+
+
+    </script>
+</body>
+
+</html>
