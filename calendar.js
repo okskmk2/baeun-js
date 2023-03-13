@@ -84,6 +84,42 @@ function groupingWeek(days, withPadding = false) {
 
 // TODO: calendar class 만들기
 
+function deltaTime(miliseconds) {
+    let sec, min, hour, day, year, output = [], suffix = '전';
+    function div(a, b) {
+        const m = parseInt(a / b), r = a % b;
+        return [m, r];
+    }
+
+    if (miliseconds < 0) {
+        miliseconds *= -1;
+        suffix = '후';
+    }
+
+    sec = miliseconds / 1000;
+    [min, sec] = div(sec, 60);
+    [hour, min] = div(min, 60);
+    [day, hour] = div(hour, 24);
+    [year, day] = div(day, 365);
+
+    if (year) {
+        output.push(year + '년');
+    }
+    if (day) {
+        output.push(day + '일');
+    }
+    if (hour) {
+        output.push(hour + '시간');
+    }
+    if (min) {
+        output.push(min + '분');
+    }
+    if (sec) {
+        output.push(sec + '초')
+    }
+    return output.join(' ') + ' ' + suffix;
+}
+
 class Calendar {
     days;
     groupedDays;
