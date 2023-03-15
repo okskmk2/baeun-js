@@ -77,6 +77,31 @@ function groupingWeek(days, withPadding = false) {
 
     return weeks;
 }
+
+/**
+ * 
+ * @param {Date[]} days 
+ */
+function groupingDate(days) {
+    const weeks = [];
+    let week = [];
+    let next = false;
+    for (let index = 0; index < days.length; index++) {
+        const date = days[index];
+        if (next) {
+            weeks.push(week);
+            week = [];
+            next = false;
+        }
+        if (date.getDay() === 6) {
+            next = true;
+        }
+    }
+    if (week.length > 0) {
+        weeks.push(week);
+    }
+    console.log(weeks);
+}
 // const today = new Date();
 // today.setMonth(0);
 // console.log(groupingWeek(getMonthDays(today)));
