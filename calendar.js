@@ -7,14 +7,6 @@ function getLastDate(date) {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 }
 
-// 1, 31
-// 2, 28
-// 3, 31
-// 4, 30
-// 5, 31
-
-
-// console.log(today.getDay()); // 요일
 /**
  * 
  * @param {Date} date 
@@ -35,7 +27,11 @@ function getMonthDays(date) {
     return days;
 }
 
-
+/**
+ * 
+ * @param {Array.<Array.<Date>>} gdays 
+ * @returns 
+ */
 function calenderDays(gdays) {
     const firstWeek = gdays[0];
     const firstWeekCnt = 7 - firstWeek.length;
@@ -65,9 +61,10 @@ function groupingDate(days) {
             week = [];
             next = false;
         }
-        if (date.getDay() === 6) {
+        if (date.day === 6) {
             next = true;
         }
+        week.push(date);
     }
     if (week.length > 0) {
         weeks.push(week);
@@ -76,7 +73,11 @@ function groupingDate(days) {
 }
 
 
-
+/**
+ * 
+ * @param {Number} miliseconds 
+ * @returns 
+ */
 function deltaTime(miliseconds) {
     let sec, min, hour, day, year, output = [], suffix = '전';
     function div(a, b) {
@@ -112,5 +113,3 @@ function deltaTime(miliseconds) {
     }
     return output.join(' ') + ' ' + suffix;
 }
-
-console.log(getMonthDays(new Date()));

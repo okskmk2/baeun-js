@@ -66,7 +66,7 @@
         let date = new Date();
         function renderCaledar() {
             const calendar_el = document.getElementById('calendar');
-            let weeks = groupingWeek(getMonthDays(date), true);
+            let weeks = calenderDays(groupingDate(getMonthDays(date)));
             // calendar drawing
             calendar_el.innerHTML = null;
             for (let i = 0; i < weeks.length; i++) {
@@ -75,7 +75,7 @@
                 for (let index = 0; index < week.length; index++) {
                     const day = week[index];
                     let td = document.createElement('td');
-                    if (index === day.day) {
+                    if (day && index === day.day) {
                         td.innerHTML = day.date;
                     }
                     row.appendChild(td);
