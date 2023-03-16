@@ -30,52 +30,24 @@ function getMonthDays(date) {
             date: t.getDate(),
             day: t.getDay()
         });
+        // days.push(t);
     }
     return days;
 }
 
-function groupingWeek(days, withPadding = false) {
-    let weeks = [];
-    let week = [];
-    let next = false;
-    for (const day of days) {
-        week.push(day);
-        if (day.day == 6) {
-            next = true;
-        }
-        if (next) {
-            weeks.push(week);
-            week = [];
-            next = false;
-        }
-    }
-    let lastgroup = weeks.slice(-1)[0];
-    let last = lastgroup.slice(-1)[0];
-    if (days.slice(-1)[0].date !== last.date) {
-        weeks.push(week);
-    }
 
-    if (withPadding) {
-        // first week padding
-        let firstweek = weeks[0];
-        if (firstweek.length < 7) {
-            let c = 7 - firstweek.length;
-            for (let t = 0; t < c; t++) {
-                firstweek.unshift({});
-            }
-        }
-
-        // last week padding
-        let lastweek = weeks[weeks.length - 1];
-        if (lastweek.length < 7) {
-            let c = 7 - lastweek.length;
-            for (let t = 0; t < c; t++) {
-                lastweek.push({});
-            }
-        }
+function calenderDays(gdays) {
+    const firstWeek = gdays[0];
+    const firstWeekCnt = 7 - firstWeek.length;
+    for (let index = 0; index < firstWeekCnt; index++) {
+        firstWeek.unshift(null);
     }
-
-    return weeks;
+    const lastWeek = gdays[gdays.length - 1];
+    const lastWeekCnt = 7 - lastWeek.length;
+    for (let index = 0; index < lastWeekCnt; index++) {
+        lastWeek.push(null);
+    }
+    return gdays;
 }
 
 /**
@@ -100,14 +72,10 @@ function groupingDate(days) {
     if (week.length > 0) {
         weeks.push(week);
     }
-    console.log(weeks);
+    return weeks;
 }
-// const today = new Date();
-// today.setMonth(0);
-// console.log(groupingWeek(getMonthDays(today)));
-// console.log(getMonthDays(today));
 
-// TODO: calendar class 만들기
+
 
 function deltaTime(miliseconds) {
     let sec, min, hour, day, year, output = [], suffix = '전';
@@ -145,14 +113,4 @@ function deltaTime(miliseconds) {
     return output.join(' ') + ' ' + suffix;
 }
 
-class Calendar {
-    days;
-    groupedDays;
-    thisYear;
-    thisMonth;
-    thisDate;
-    thisDay;
-    constructor() {
-
-    }
-}
+console.log(getMonthDays(new Date()));
