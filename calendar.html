@@ -59,11 +59,23 @@
             </thead>
             <tbody id="calendar"></tbody>
         </table>
+        <input type="date" id="checkdate">
     </div>
     <script>
         let currentMonth = new Date().getMonth();
         const currentMonthDiv = document.getElementById('currentMonthDiv');
+        const checkdate = document.getElementById('checkdate');
         let date = new Date();
+
+        function pad(num){
+            return num.toString().padStart(2, '0');
+        }
+
+        checkdate.addEventListener('change', ()=>{
+            date = checkdate.valueAsDate;
+            renderCaledar();
+        });
+
         function renderCaledar() {
             const calendar_el = document.getElementById('calendar');
             let weeks = calenderDays(groupingDate(getMonthDays(date)));
@@ -76,7 +88,12 @@
                     const day = week[index];
                     let td = document.createElement('td');
                     if (day && index === day.day) {
+                        td.dataset.dateValue = `${day.year}-${pad(day.month)}-${pad(day.date)}`;
                         td.innerHTML = day.date;
+                        td.addEventListener('click', ()=>{
+                            
+                            checkdate.value = td.dataset.dateValue;
+                        });
                     }
                     row.appendChild(td);
                 }
