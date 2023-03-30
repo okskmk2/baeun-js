@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .item {
+            margin-bottom: 8px;
+        }
+
+        .title {
+            margin-bottom: 4px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .overview {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="query">
+    <div id="output"></div>
+    <script>
+        const api_key = '';// secret
+        const queryEl = document.getElementById('query');
+        queryEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                const query = queryEl.value;
+                fetch(`https://api.themoviedb.org/3/search/movie?api_key=${api_key}&language=ko-KR&query=${query}&region=KR`).then(res => res.json()).then(data => {
+                    document.getElementById('output').innerHTML = null;
+                    const ulEl = renderResult(data.results);
+                    document.getElementById('output').appendChild(ulEl);
+                })
+            }
+        });
+        function renderResult(results) {
+            const wraperEl = document.createElement('ul');
+            for (let index = 0; index < results.length; index++) {
+                const item = results[index];
+                const itemEl = document.createElement('li');
+                itemEl.className = 'item';
+                const titleEl = document.createElement('div');
+                const overviewEl = document.createElement('div');
+                titleEl.innerHTML = item.title;
+                titleEl.className = 'title';
+                overviewEl.innerHTML = item.overview;
+                overviewEl.className = 'overview';
+                itemEl.appendChild(titleEl);
+                itemEl.appendChild(overviewEl);
+                wraperEl.appendChild(itemEl);
+            }
+            return wraperEl;
+        }
+
+    </script>
+</body>
+</html>
